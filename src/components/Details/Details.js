@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 const { REACT_APP_GET_ALL_DOGS } = process.env;
 
@@ -27,6 +27,9 @@ export default function Details() {
             <h2>{dog.life_span}</h2>
           </div>
         ))}
+        <button>
+          <Link to='/home'>Atras</Link>
+        </button>
     </div>
   );
 }
