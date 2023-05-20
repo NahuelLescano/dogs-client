@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllDogs } from '../../redux/action-creators/index';
 import Card from '../Card/Card';
+import NavBar from '../NavBar/NavBar';
+import './Home.css';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -14,12 +16,17 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      Home
+    <div className="cards-container">
+      <NavBar />
       {allDogs &&
         allDogs.map((dog) => (
           <div key={dog.id}>
-            <Card id={dog.id} name={dog.name} lifeSpan={dog.life_span} image={dog.image?.url} />
+            <Card
+              id={dog.id}
+              name={dog.name}
+              lifeSpan={dog.life_span}
+              image={dog.image}
+            />
           </div>
         ))}
     </div>
