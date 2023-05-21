@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function NavBar() {
   return (
     <div>
-      <Link to="/create">Crear perrito</Link>
+      <Link to="/create">Create dog</Link>
     </div>
   );
 }
