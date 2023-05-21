@@ -9,7 +9,7 @@ export default function Card({ id, name, lifeSpan, image }) {
       <h3>{lifeSpan}</h3>
       <img src={image} alt={name} className="dog-image" />
       <button>
-        <Link to={`/details/${id}`}>Ver más</Link>
+        <Link to={`/details/${id}`}>See more</Link>
       </button>
     </div>
   );
