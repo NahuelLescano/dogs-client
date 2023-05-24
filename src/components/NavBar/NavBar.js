@@ -1,10 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import './NavBar.css';
 
 export default function NavBar() {
   return (
-    <div>
-      <Link to="/create">Create dog</Link>
+    <div className="nav-container">
+      <NavLink
+        className={({ isActive }) => (!isActive && 'disable')}
+        to="/create"
+      >
+        Create dog
+      </NavLink>
     </div>
   );
 }
