@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './Card.css';
 
 export default function Card({ id, name, lifeSpan, image }) {
@@ -8,9 +8,12 @@ export default function Card({ id, name, lifeSpan, image }) {
       <h2>{name}</h2>
       <h3>{lifeSpan}</h3>
       <img src={image} alt={name} className="dog-image" />
-      <button>
-        <Link to={`/details/${id}`}>See more</Link>
-      </button>
+      <NavLink
+        className={({ isActive }) => !isActive && 'disable-card'}
+        to={`/details/${id}`}
+      >
+        See more
+      </NavLink>
     </div>
   );
 }
