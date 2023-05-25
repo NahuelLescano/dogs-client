@@ -1,0 +1,31 @@
+.container-detail {
+  background-color: chocolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-detail {
+  width: 400px;
+  height: 21.6em;
+  margin: 0;
+  padding: 0;
+  border-radius: 1rem;
+}
+
+.button-detail {
+  font-size: 0.8rem;
+  width: 10%;
+  background-color: lightblue;
+  border: none;
+  border-radius: 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button-detail:hover {
+  background-color: red;
+  color: black;
+}
