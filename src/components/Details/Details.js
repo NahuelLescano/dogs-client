@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
+import './Details.css'
 const { REACT_APP_GET_ALL_DOGS } = process.env;
 
 export default function Details() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [dog, setDog] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -19,17 +21,15 @@ export default function Details() {
   return (
     <div>
       {!isLoading ? (
-        <div>
+        <div className='container-detail'>
+          <button className='button-detail' onClick={() => navigate('/home')}>Go back</button>
           <h1>Dog details</h1>
-          <img src={dog.image} alt={dog.name} />
+          <img src={dog.image} alt={dog.name} className='image-detail' />
           <h2>ID: {dog.id}</h2>
           <h2>Name: {dog.name}</h2>
           <h2>Height: {dog.height?.metric}</h2>
           <h2>Weight: {dog.weight?.metric}</h2>
           <h2>Life span: {dog.life_span}</h2>
-          <button>
-            <Link to="/home">Go back</Link>
-          </button>
         </div>
       ) : (
         <div>
