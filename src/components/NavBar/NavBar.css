@@ -17,6 +17,10 @@
   font-size: medium;
 }
 
+.nav-container select {
+  margin-left: 20px;
+}
+
 .disable {
     color: white;
 }
