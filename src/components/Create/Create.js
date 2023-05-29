@@ -2,24 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Create.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllTemperaments } from '../../redux/action-creators/index';
 // import validation from './validation';
 
-const { REACT_APP_GET_TEMPERAMENTS, REACT_APP_GET_ALL_DOGS } = process.env;
+const { REACT_APP_GET_ALL_DOGS } = process.env;
 
 // Todavía falta que se rendericen los errores.
 export default function Form() {
-  const [input, setInput] = useState({
+  const [measure, setMeasure] = useState({
     weightMin: '',
     weightMax: '',
     heightMin: '',
     heightMax: '',
+  });
+
+  const [input, setInput] = useState({
+    weight: {},
+    height: {},
     name: '',
-    lifeSpan: '',
+    life_span: '',
     image: '',
     temperament: '',
   });
 
-  const [temperaments, setTemperaments] = useState();
+  const allTemperaments = useSelector((state) => state.temperaments);
+  const dispatch = useDispatch();
 
   // const [errors, setErrors] = useState({
   //   weight: '',
@@ -27,15 +35,27 @@ export default function Form() {
   //   name: '',
   //   lifeSpan: '',
   //   image: '',
-  //   temperament: '',
+  //   temperaments: '',
   // });
 
   const handleInputChange = (event) => {
-    setInput({
-      ...input,
-      [event.target.name]: event.target.value,
-    });
-
+    const name = event.target.name;
+    if (
+      name === 'weightMin' ||
+      name === 'weightMax' ||
+      name === 'heightMax' ||
+      name === 'heightMin'
+    ) {
+      setMeasure({
+        ...measure,
+        [event.target.name]: event.target.value,
+      });
+    } else {
+      setInput({
+        ...input,
+        [event.target.name]: event.target.value,
+      });
+    }
     // setErrors(
     //   validation({
     //     ...input,
@@ -66,24 +86,27 @@ export default function Form() {
     //   );
     // }
     input.weight = {
-      metric: `${input.weightMin} - ${input.weightMax}`,
+      metric: `${measure.weightMin} - ${measure.weightMax}`,
     };
 
     input.height = {
-      metric: `${input.heightMin} - ${input.heightMax}`,
+      metric: `${measure.heightMin} - ${measure.heightMax}`,
     };
 
+    input.temperament = parseInt(input.temperament);
+
     try {
-      await axios.post(REACT_APP_GET_ALL_DOGS);
+      const response = await axios.post(REACT_APP_GET_ALL_DOGS, input);
+      console.log(response);
+      alert('Perro creado.');
     } catch (error) {
       alert(error.message);
     }
   };
 
   useEffect(() => {
-    axios
-      .get(REACT_APP_GET_TEMPERAMENTS)
-      .then((response) => setTemperaments(response.data));
+    dispatch(getAllTemperaments());
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -110,7 +133,7 @@ export default function Form() {
             onChange={handleInputChange}
           />
         </div>
-        <br/>
+        <br />
         <label htmlFor="height">Altura: </label>
         <label htmlFor="min">Mínimo: </label>
         <input
@@ -126,7 +149,7 @@ export default function Form() {
           placeholder="Ingrese el peso max..."
           onChange={handleInputChange}
         />
-        <br/>
+        <br />
         <label htmlFor="name">Nombre: </label>
         <input
           id="name"
@@ -134,15 +157,15 @@ export default function Form() {
           placeholder="Ingrese el nombre"
           onChange={handleInputChange}
         />
-        <br/>
-        <label htmlFor="lifeSpan">Tiempo de vida: </label>
+        <br />
+        <label htmlFor="life_span">Tiempo de vida: </label>
         <input
-          id="lifeSpan"
-          name="lifeSpan"
+          id="life_span"
+          name="life_span"
           placeholder="Ingrese el tiempo de vida"
           onChange={handleInputChange}
         />
-        <br/>
+        <br />
         <label htmlFor="temperament">Temperamento: </label>
         <select
           id="temperament"
@@ -150,12 +173,14 @@ export default function Form() {
           onChange={handleInputChange}
         >
           <option>Seleccione un temperamento</option>
-          {temperaments &&
-            temperaments.map((temp) => (
-              <option key={temp.id}>{temp.name}</option>
+          {allTemperaments &&
+            allTemperaments.map((temp) => (
+              <option key={temp.id} value={temp.id}>
+                {temp.name}
+              </option>
             ))}
         </select>
-        <br/>
+        <br />
         <label htmlFor="image">Imagen: </label>
         <input
           id="image"
