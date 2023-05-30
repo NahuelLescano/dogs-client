@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './NavBar.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { filteredDogs } from '../../redux/action-creators';
+import { filterDogs } from '../../redux/action-creators';
 
 export default function NavBar() {
   const allTemperaments = useSelector((state) => state.temperaments);
-  // eslint-disable-next-line
-  const [dogFiltered, setDogFitered] = useState();
+
   const dispatch = useDispatch();
 
-  const handleInputChange = (e) => {
-    dispatch(filteredDogs(e.target.value));
+  const handleFilter = (e) => {
+    dispatch(
+      filterDogs({
+        name: e.target.name,
+        value: e.target.value,
+      })
+    );
   };
 
   return (
@@ -22,19 +26,19 @@ export default function NavBar() {
       >
         Create dog
       </NavLink>
-      <select name="temperament" onChange={handleInputChange}>
-        <option>Seleccione un temperamento</option>
+      <select name="temperament" onChange={handleFilter}>
+        <option value="reset">Todos</option>
         {allTemperaments &&
           allTemperaments.map((temp) => (
-            <option key={temp.id} value={temp.id}>
+            <option key={temp.id} value={temp.name}>
               {temp.name}
             </option>
           ))}
       </select>
 
-      <select name="create" onChange={handleInputChange}>
-        <option>api</option>
-        <option>base de dato</option>
+      <select name="create" onChange={handleFilter}>
+        <option value="api">api</option>
+        <option value="base de datos">base de dato</option>
       </select>
 
       <select>
