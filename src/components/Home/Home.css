@@ -27,3 +27,13 @@
 .no-visible {
   opacity: 0;
 }
+
+.error {
+  opacity: 1;
+  position: absolute;
+  z-index: 5;
+}
+
+.no-error {
+  opacity: 0;
+}
