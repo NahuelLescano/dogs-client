@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllDogs,
   getAllTemperaments,
+  setError,
 } from '../../redux/action-creators/index';
 import Card from '../Card/Card';
 import NavBar from '../NavBar/NavBar';
@@ -14,12 +15,15 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const allDogs = useSelector((state) => state.allDogs);
+
   const [page, setPage] = useState(1);
-  //variables para calcular la cantidad de paginas
+  // Variables to calculate the number of pages. 
   const dogsPage = 8;
   const max = Math.ceil(allDogs?.length / dogsPage);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     const fetchDogs = async () => {
@@ -31,8 +35,16 @@ export default function Home() {
     // eslint-disable-next-line
   }, []);
 
+  const handleClick = () => {
+    dispatch(setError());
+  };
+
   return (
     <div className="cards-container">
+      <div className={error ? 'error' : 'no-error'}>
+        <h1>No se encontró perritos</h1>
+        <button onClick={handleClick}>X</button>
+      </div>
       <NavBar />
       <div className="home-container">
         {!isLoading ? (
