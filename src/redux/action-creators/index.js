@@ -2,6 +2,9 @@ import {
   GET_ALL_DOGS,
   DOGS_FILTERED,
   GET_ALL_TEMPERAMENTS,
+  DOG_TEMPERAMENT,
+  DOG_RESET,
+  ERROR,
 } from '../action-types';
 import axios from 'axios';
 const { REACT_APP_GET_ALL_DOGS, REACT_APP_GET_TEMPERAMENTS } = process.env;
@@ -26,9 +29,28 @@ export const getAllTemperaments = () => {
   };
 };
 
-export const filteredDogs = (fileredDogs) => {
+export const filterDogs = (fileredDogs) => {
+  if (fileredDogs.name === 'create' && fileredDogs.value !== 'reset') {
+    return {
+      type: DOGS_FILTERED,
+      payload: fileredDogs.value,
+    };
+  }
+
+  if (fileredDogs.value === 'reset') {
+    return {
+      type: DOG_RESET,
+    };
+  }
+
   return {
-    type: DOGS_FILTERED,
-    payload: fileredDogs,
+    type: DOG_TEMPERAMENT,
+    payload: fileredDogs.value,
+  };
+};
+
+export const setError = () => {
+  return {
+    type: ERROR,
   };
 };
