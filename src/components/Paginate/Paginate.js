@@ -6,7 +6,7 @@ export default function Paginate({ max, page, setPage }) {
     pagination.push(i);
   }
 
-  const handleClickAvanzar = (e) => {
+  const handleClickMove = (e) => {
     const { name } = e.target;
     if (name === 'avanzar') {
       page + 1 > max ? setPage(1) : setPage(page + 1);
@@ -22,7 +22,7 @@ export default function Paginate({ max, page, setPage }) {
 
   return (
     <div>
-      <button name="retroceder" onClick={handleClickAvanzar}>
+      <button name="retroceder" onClick={handleClickMove}>
         Retroceder
       </button>
       {pagination.map((pag, index) => (
@@ -30,7 +30,7 @@ export default function Paginate({ max, page, setPage }) {
           {pag}
         </button>
       ))}
-      <button name="avanzar" onClick={handleClickAvanzar}>
+      <button name="avanzar" onClick={handleClickMove}>
         Avanzar
       </button>
     </div>
