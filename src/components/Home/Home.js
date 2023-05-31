@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Card from '../Card/Card';
+import NavBar from '../NavBar/NavBar';
+import Loading from '../Loading/Loading';
+import Paginate from '../Paginate/Paginate';
 import {
   getAllDogs,
   getAllTemperaments,
   setError,
 } from '../../redux/action-creators/index';
-import Card from '../Card/Card';
-import NavBar from '../NavBar/NavBar';
 import './Home.css';
-import Loading from '../Loading/Loading';
-import Paginate from '../Paginate/Paginate';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -40,13 +40,13 @@ export default function Home() {
   };
 
   return (
-    <div className="cards-container">
+    <div className="home-container">
       <div className={error ? 'error' : 'no-error'}>
         <h1>No se encontró perritos</h1>
         <button onClick={handleClick}>X</button>
       </div>
       <NavBar />
-      <div className="home-container">
+      <div className="cards-container">
         {!isLoading ? (
           allDogs &&
           allDogs
