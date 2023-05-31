@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import './NavBar.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterDogs } from '../../redux/action-creators';
+import { filterDogs, orderDogs } from '../../redux/action-creators';
+import SearchBar from '../SearchBar/SearchBar';
+import './NavBar.css';
 
 export default function NavBar() {
+  const [order, setOrder] = useState(false);
   const allTemperaments = useSelector((state) => state.temperaments);
 
   const dispatch = useDispatch();
@@ -16,6 +18,11 @@ export default function NavBar() {
         value: e.target.value,
       })
     );
+  };
+
+  const handleOrder = (e) => {
+    dispatch(orderDogs(e.target.value));
+    setOrder(!order);
   };
 
   return (
@@ -37,13 +44,18 @@ export default function NavBar() {
       </select>
 
       <select name="create" onChange={handleFilter}>
-        <option value="api">api</option>
-        <option value="base de datos">base de dato</option>
+        <option value="api">API</option>
+        <option value="base de datos">Base de dato</option>
       </select>
 
-      <select>
-        <option>Ordenar</option>
+      <select onChange={handleOrder}>
+        <option value="ascending weight">Ascendente por peso</option>
+        <option value="descending weght">Descendente por peso</option>
+        <option value="ascending breed">Ascendente por raza</option>
+        <option value="descending breed">Descendente por raza</option>
       </select>
+
+      <SearchBar />
     </div>
   );
 }
