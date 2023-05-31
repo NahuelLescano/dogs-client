@@ -5,6 +5,8 @@ import {
   DOG_TEMPERAMENT,
   DOG_RESET,
   ERROR,
+  ORDER,
+  SEARCH_DOG,
 } from '../action-types';
 import axios from 'axios';
 const { REACT_APP_GET_ALL_DOGS, REACT_APP_GET_TEMPERAMENTS } = process.env;
@@ -52,5 +54,19 @@ export const filterDogs = (fileredDogs) => {
 export const setError = () => {
   return {
     type: ERROR,
+  };
+};
+
+export const orderDogs = (order) => {
+  return {
+    type: ORDER,
+    payload: order,
+  };
+};
+
+export const searchDog = (dogName) => {
+  return {
+    type: SEARCH_DOG,
+    payload: dogName,
   };
 };
