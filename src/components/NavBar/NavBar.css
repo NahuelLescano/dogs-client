@@ -9,7 +9,10 @@
   position: fixed;
   top: 0;
   z-index: 100;
-  background-color: red;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid white;
+  border-radius: 1rem;
 }
 
 .nav-container :link {
@@ -22,7 +25,7 @@
 }
 
 .disable {
-    color: white;
+    color: black;
 }
 
 .disable:hover {
