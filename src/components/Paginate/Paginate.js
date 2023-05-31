@@ -1,4 +1,5 @@
 import React from 'react';
+import './Paginate.css';
 
 export default function Paginate({ max, page, setPage }) {
   const pagination = [];
@@ -21,17 +22,31 @@ export default function Paginate({ max, page, setPage }) {
   };
 
   return (
-    <div>
-      <button name="retroceder" onClick={handleClickMove}>
+    <div className="pag-container">
+      <button
+        className={page === 1 ? 'disable-prev' : 'pag-button'}
+        name="retroceder"
+        onClick={handleClickMove}
+      >
         Retroceder
       </button>
       {pagination.map((pag, index) => (
-        <button key={index} value={pag} name={pag} onClick={handleClick}>
+        <button
+          className={page === pag ? 'active' : 'disable'}
+          key={index}
+          value={pag}
+          name={pag}
+          onClick={handleClick}
+        >
           {pag}
         </button>
       ))}
-      <button name="avanzar" onClick={handleClickMove}>
-        Avanzar
+      <button
+        className={page === max ? 'disable-next' : 'pag-button'}
+        name="avanzar"
+        onClick={handleClickMove}
+      >
+        Siguiente
       </button>
     </div>
   );
