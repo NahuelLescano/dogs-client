@@ -5,6 +5,8 @@ import {
   ERROR,
   DOG_TEMPERAMENT,
   DOG_RESET,
+  ORDER,
+  SEARCH_DOG,
 } from '../action-types';
 
 const initialState = {
@@ -68,6 +70,44 @@ const rootReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         error: false,
+      };
+
+    case ORDER:
+      const parseMetricWeight = (obj) => {
+        if (!obj || !obj.metric) {
+          return Number.POSITIVE_INFINITY; // To the end of the sorted list
+        }
+
+        const weight = obj.metric.split(' - ')[0];
+        return isNaN(weight) ? Number.POSITIVE_INFINITY : weight;
+      };
+      return {
+        ...state,
+        allDogs: [
+          ...state.allDogs.sort((a, b) => {
+            if (payload === 'ascending breed') {
+              return a.name.localeCompare(b.name);
+            }
+
+            if (payload === 'descending breed') {
+              return b.name.localeCompare(a.name);
+            }
+
+            const aWeight = parseMetricWeight(a.weight);
+            const bWeight = parseMetricWeight(b.weight);
+            if (payload === 'ascending weight') {
+              return aWeight - bWeight;
+            }
+
+            return bWeight - aWeight;
+          }),
+        ],
+      };
+
+    case SEARCH_DOG:
+      return {
+        ...state,
+        allDogs: state.allDogs.filter((dog) => dog.name === payload),
       };
 
     default:
