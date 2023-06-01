@@ -23,23 +23,16 @@
   margin: 3px;
   cursor: pointer;
   outline: none;
-  background-color: #003D7F;
+  background-color: #003d7f;
   color: white;
 }
 
-.active {
-  background-color: rgb(22, 150, 22);
+.active-button {
+  background-color: white;
+  color: #003d7f;
 }
 
-.disable {
-  background-color: #003D7F;
+.disable-button {
+  background-color: #003d7f;
   color: white;
-}
-
-.disable-prev {
-  opacity: 0;
-}
-
-.disable-next {
-  opacity: 0;
 }
