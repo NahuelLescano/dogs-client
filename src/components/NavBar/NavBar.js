@@ -31,7 +31,7 @@ export default function NavBar() {
         className={({ isActive }) => !isActive && 'disable'}
         to="/create"
       >
-        Create dog
+        Crear perro
       </NavLink>
       <select name="temperament" onChange={handleFilter}>
         <option value="reset">Todos</option>
