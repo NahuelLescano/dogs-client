@@ -32,7 +32,7 @@ export default function Paginate({ max, page, setPage }) {
       </button>
       {pagination.map((pag, index) => (
         <button
-          className={page === pag ? 'active' : 'disable'}
+          className={page === pag ? 'active-button' : 'disable-button'}
           key={index}
           value={pag}
           name={pag}
