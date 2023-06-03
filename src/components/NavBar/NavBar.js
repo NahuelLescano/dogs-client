@@ -5,7 +5,7 @@ import { filterDogs, orderDogs } from '../../redux/action-creators';
 import SearchBar from '../SearchBar/SearchBar';
 import './NavBar.css';
 
-export default function NavBar() {
+export default function NavBar({ setPage }) {
   const [order, setOrder] = useState(false);
   const allTemperaments = useSelector((state) => state.temperaments);
 
@@ -18,6 +18,7 @@ export default function NavBar() {
         value: e.target.value,
       })
     );
+    setPage(1);
   };
 
   const handleOrder = (e) => {
@@ -31,10 +32,10 @@ export default function NavBar() {
         className={({ isActive }) => !isActive && 'disable'}
         to="/create"
       >
-        Crear perro
+        Create dog
       </NavLink>
       <select name="temperament" onChange={handleFilter}>
-        <option value="reset">Todos</option>
+        <option value="reset">All</option>
         {allTemperaments &&
           allTemperaments.map((temp) => (
             <option key={temp.id} value={temp.name}>
@@ -44,18 +45,19 @@ export default function NavBar() {
       </select>
 
       <select name="create" onChange={handleFilter}>
+        <option value="reset">All</option>
         <option value="api">API</option>
-        <option value="base de datos">Base de dato</option>
+        <option value="database">Database</option>
       </select>
 
       <select onChange={handleOrder}>
-        <option value="ascending weight">Ascendente por peso</option>
-        <option value="descending weght">Descendente por peso</option>
-        <option value="ascending breed">Ascendente por raza</option>
-        <option value="descending breed">Descendente por raza</option>
+        <option value="ascending weight">Ascending by weight</option>
+        <option value="descending weight">Descending by weight</option>
+        <option value="ascending breed">Ascending by breed</option>
+        <option value="descending breed">Descending by breed</option>
       </select>
 
-      <SearchBar />
+      <SearchBar setPage={setPage} />
     </div>
   );
 }
