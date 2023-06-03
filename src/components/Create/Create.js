@@ -23,15 +23,17 @@ export default function Form() {
     name: '',
     life_span: '',
     image: '',
-    temperament: '',
+    temperaments: [],
   });
 
   const allTemperaments = useSelector((state) => state.temperaments);
   const dispatch = useDispatch();
 
   // const [errors, setErrors] = useState({
-  //   weight: '',
-  //   height: '',
+  //   weightMin: '',
+  //   weightMax: '',
+  //   heightMin: '',
+  //   heightMax: '',
   //   name: '',
   //   lifeSpan: '',
   //   image: '',
@@ -39,30 +41,47 @@ export default function Form() {
   // });
 
   const handleInputChange = (event) => {
-    const name = event.target.name;
+    const { name, value } = event.target;
     if (
       name === 'weightMin' ||
       name === 'weightMax' ||
       name === 'heightMax' ||
       name === 'heightMin'
     ) {
+      // setErrors(
+      //   validation({
+      //     ...measure,
+      //     [name]: value,
+      //   })
+      // );
+
       setMeasure({
         ...measure,
-        [event.target.name]: event.target.value,
+        [name]: value,
       });
     } else {
-      setInput({
-        ...input,
-        [event.target.name]: event.target.value,
-      });
+      // setErrors(
+      //   validation({
+      //     ...input,
+      //     [name]: value,
+      //   })
+      // );
+
+      if (name !== 'temperaments') {
+        setInput({
+          ...input,
+          [name]: value,
+        });
+      } else {
+        setInput({
+          ...input,
+          temperaments: [...input.temperaments, parseInt(value)],
+        });
+      }
     }
-    // setErrors(
-    //   validation({
-    //     ...input,
-    //     [event.target.name]: event.target.value,
-    //   })
-    // );
   };
+
+  console.log(input.temperaments);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -93,12 +112,9 @@ export default function Form() {
       metric: `${measure.heightMin} - ${measure.heightMax}`,
     };
 
-    input.temperament = parseInt(input.temperament);
-
     try {
       const response = await axios.post(REACT_APP_GET_ALL_DOGS, input);
-      console.log(response);
-      alert('Perro creado.');
+      alert(response.data);
     } catch (error) {
       alert(error.message);
     }
@@ -136,7 +152,7 @@ export default function Form() {
           className="create-input"
         />
         <br />
-        <label htmlFor="height">Altura(cm): </label>
+        <label htmlFor="height">Altura (cm): </label>
         <label htmlFor="min">Mínimo: </label>
         <input
           id="min"
@@ -172,10 +188,10 @@ export default function Form() {
           className="create-input"
         />
         <br />
-        <label htmlFor="temperament">Temperamento: </label>
+        <label htmlFor="temperaments">Temperamento: </label>
         <select
-          id="temperament"
-          name="temperament"
+          id="temperaments"
+          name="temperaments"
           onChange={handleInputChange}
           className="create-input"
         >
