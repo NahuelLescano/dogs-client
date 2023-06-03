@@ -3,114 +3,80 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllTemperaments } from '../../redux/action-creators/index';
+import validation from './validation';
 import './Create.css';
-// import validation from './validation';
 
 const { REACT_APP_GET_ALL_DOGS } = process.env;
 
-// Todavía falta que se rendericen los errores.
 export default function Form() {
   const [measure, setMeasure] = useState({
+    weightMin: { booleano: false, value: '' },
+    weightMax: { booleano: false, value: '' },
+    heightMin: { booleano: false, value: '' },
+    heightMax: { booleano: false, value: '' },
+    name: { booleano: false, value: '' },
+    life_span: { booleano: false, value: '' },
+    image: { booleano: false, value: '' },
+    temperaments: { booleano: false, value: [] },
+  });
+
+  // eslint-disable-next-line
+  const [errors, setErrors] = useState({
     weightMin: '',
     weightMax: '',
     heightMin: '',
     heightMax: '',
+    name: '',
+    life_span: '',
+    image: '',
+    temperaments: 'Selecciona al menos 2 temperamentos',
   });
 
-  const [input, setInput] = useState({
+  let input = {
     weight: {},
     height: {},
     name: '',
     life_span: '',
     image: '',
-    temperaments: [],
-  });
+    temperament: [],
+  };
 
   const allTemperaments = useSelector((state) => state.temperaments);
   const dispatch = useDispatch();
 
-  // const [errors, setErrors] = useState({
-  //   weightMin: '',
-  //   weightMax: '',
-  //   heightMin: '',
-  //   heightMax: '',
-  //   name: '',
-  //   lifeSpan: '',
-  //   image: '',
-  //   temperaments: '',
-  // });
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (
-      name === 'weightMin' ||
-      name === 'weightMax' ||
-      name === 'heightMax' ||
-      name === 'heightMin'
-    ) {
-      // setErrors(
-      //   validation({
-      //     ...measure,
-      //     [name]: value,
-      //   })
-      // );
-
-      setMeasure({
-        ...measure,
-        [name]: value,
-      });
-    } else {
-      // setErrors(
-      //   validation({
-      //     ...input,
-      //     [name]: value,
-      //   })
-      // );
-
-      if (name !== 'temperaments') {
-        setInput({
-          ...input,
-          [name]: value,
-        });
-      } else {
-        setInput({
-          ...input,
-          temperaments: [...input.temperaments, parseInt(value)],
-        });
-      }
-    }
+    validation({ name, value, errors, setErrors, measure, setMeasure });
   };
-
-  console.log(input.temperaments);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // if (
-    //   !errors.weight &&
-    //   !errors.height &&
-    //   !errors.name &&
-    //   !errors.lifeSpan &&
-    //   !errors.image &&
-    //   !errors.temperament
-    // ) {
-    //   setErrors(
-    //     validation({
-    //       weight: '',
-    //       height: '',
-    //       name: '',
-    //       lifeSpan: '',
-    //       image: '',
-    //       temperament: '',
-    //     })
-    //   );
-    // }
-    input.weight = {
-      metric: `${measure.weightMin} - ${measure.weightMax}`,
-    };
 
-    input.height = {
-      metric: `${measure.heightMin} - ${measure.heightMax}`,
-    };
+    if (
+      measure.weightMin.booleano &&
+      measure.weightMax.booleano &&
+      measure.heightMin.booleano &&
+      measure.heightMax.booleano &&
+      measure.name.booleano &&
+      measure.life_span.booleano &&
+      measure.image.booleano &&
+      measure.temperaments.booleano
+    ) {
+      console.log('complete');
+      input.weight = {
+        metric: `${measure.weightMin.value} - ${measure.weightMax.value}`,
+      };
+
+      input.height = {
+        metric: `${measure.heightMin.value} - ${measure.heightMax.value}`,
+      };
+      input.name = measure.name.value;
+      input.life_span = measure.life_span.value;
+      input.temperament = measure.temperaments.value;
+      input.image = measure.image.value;
+      console.log(input);
+    } else {
+      console.log('not complete');
+    }
 
     try {
       const response = await axios.post(REACT_APP_GET_ALL_DOGS, input);
@@ -143,6 +109,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.weightMin}</p>
         <label htmlFor="max">Máximo: </label>
         <input
           id="max"
@@ -151,6 +118,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.weightMax}</p>
         <br />
         <label htmlFor="height">Altura (cm): </label>
         <label htmlFor="min">Mínimo: </label>
@@ -161,6 +129,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.heightMin}</p>
         <label htmlFor="max">Máximo: </label>
         <input
           id="max"
@@ -169,6 +138,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.heightMax}</p>
         <br />
         <label htmlFor="name">Nombre: </label>
         <input
@@ -178,6 +148,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.name}</p>
         <br />
         <label htmlFor="life_span">Tiempo de vida: </label>
         <input
@@ -187,6 +158,7 @@ export default function Form() {
           onChange={handleInputChange}
           className="create-input"
         />
+        <p>{errors.life_span}</p>
         <br />
         <label htmlFor="temperaments">Temperamento: </label>
         <select
@@ -203,6 +175,7 @@ export default function Form() {
               </option>
             ))}
         </select>
+        <p>{errors.temperaments}</p>
         <br />
         <label htmlFor="image">Imagen: </label>
         <input
@@ -213,6 +186,7 @@ export default function Form() {
           className="create-input"
           onChange={handleInputChange}
         />
+        <p>{errors.image}</p>
         <button className="create-button" type="submit">
           Enviar
         </button>
