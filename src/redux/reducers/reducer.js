@@ -32,11 +32,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
           ? myDogs.filter((dog) => typeof dog.id === 'number')
           : myDogs.filter((dog) => typeof dog.id === 'string');
 
-      const error = payload === 'base de datos' && dogs.length === 0;
+      const error = payload === 'database' && dogs.length === 0;
       if (!error) {
         return {
           ...state,
-          dogs,
+          allDogs: dogs,
         };
       }
 
