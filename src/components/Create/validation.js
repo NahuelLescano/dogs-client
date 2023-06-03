@@ -2,45 +2,220 @@ const regexName = /^([a-zA-Z ]+)$/i;
 const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
 
 export default function validation({
-  weightMin,
-  weightMax,
-  heightMin,
-  heightMax,
   name,
-  lifeSpan,
-  image,
-  temperament,
+  value,
+  errors,
+  setErrors,
+  measure,
+  setMeasure,
 }) {
-  weightMin = parseInt(weightMin);
-  weightMax = parseInt(weightMin);
-  heightMin = parseInt(heightMin);
-  heightMax = parseInt(heightMax);
+  if (value === '') {
+    return (
+      setErrors({
+        ...errors,
+        [name]: 'Debes completar la informacion',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value },
+      })
+    );
+  }
+  if (name === 'name' && !regexName.test(value)) {
+    return (
+      setErrors({
+        ...errors,
+        [name]: '"nombre" no puede tener caracteres especiales o números',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value },
+      })
+    );
+  }
+  if (
+    (name === 'weightMin' && isNaN(value)) ||
+    (name === 'weightMax' && isNaN(value)) ||
+    (name === 'heightMin' && isNaN(value)) ||
+    (name === 'heightMax' && isNaN(value))
+  ) {
+    return (
+      setErrors({
+        ...errors,
+        [name]: 'Solo puedes ingresar numeros',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value: measure[name].value },
+      })
+    );
+  }
+  if (
+    (name === 'weightMax' &&
+      parseInt(value) < parseInt(measure.weightMin.value)) ||
+    (name === 'heightMax' &&
+      parseInt(value) < parseInt(measure.heightMin.value)) ||
+    (name === 'weightMax' &&
+      parseInt(value) === parseInt(measure.weightMin.value)) ||
+    (name === 'heightMax' &&
+      parseInt(value) === parseInt(measure.heightMin.value))
+  ) {
+    return (
+      setErrors({
+        ...errors,
+        [name]: `${name} debe ser mayor`,
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value: measure[name].value },
+      })
+    );
+  }
+  if (
+    (name === 'weightMin' &&
+      parseInt(value) > parseInt(measure.weightMax.value)) ||
+    (name === 'heightMin' &&
+      parseInt(value) > parseInt(measure.heightMax.value)) ||
+    (name === 'weightMin' &&
+      parseInt(value) === parseInt(measure.weightMax.value)) ||
+    (name === 'heightMin' &&
+      parseInt(value) === parseInt(measure.heightMax.value))
+  ) {
+    const aux = name === 'weightMin' ? 'weightMax' : 'heightMax';
+    return (
+      setErrors({
+        ...errors,
+        [aux]: `${aux} debe ser mayor`,
+        [name]: '',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value },
+        [aux]: { booleano: false, value: measure[aux].value },
+      })
+    );
+  }
+  if (
+    (name === 'weightMax' &&
+      parseInt(value) > parseInt(measure.weightMin.value)) ||
+    (name === 'heightMax' &&
+      parseInt(value) > parseInt(measure.heightMin.value))
+  ) {
+    const aux = name === 'weightMax' ? 'weightMin' : 'heightMin';
+    return (
+      setErrors({
+        ...errors,
+        [name]: '',
+        [aux]: '',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: true, value },
+        [aux]: { booleano: true, value: measure[aux].value },
+      })
+    );
+  }
+  if (
+    (name === 'weightMin' &&
+      parseInt(value) < parseInt(measure.weightMax.value)) ||
+    (name === 'heightMin' &&
+      parseInt(value) < parseInt(measure.heightMax.value))
+  ) {
+    const aux = name === 'weightMin' ? 'weightMax' : 'heightMax';
+    return (
+      setErrors({
+        ...errors,
+        [name]: '',
+        [aux]: '',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: true, value },
+      })
+    );
+  }
+  if (name === 'life_span' && !value.includes('-')) {
+    return isNaN(value)
+      ? (setErrors({
+          [name]: 'error',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: { booleano: false, value: measure[name].value },
+        }))
+      : (setErrors({
+          [name]: '',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: { booleano: true, value },
+        }));
+  }
+  if (name === 'life_span' && value.includes('-')) {
+    const aux = value.split('-');
+    var number = aux.every((valor) => {
+      return !isNaN(valor);
+    });
+    return !number || aux.length < 1
+      ? (setErrors({
+          [name]: 'error',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: { booleano: false, value: measure[name].value },
+        }))
+      : (setErrors({
+          [name]: '',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: { booleano: true, value },
+        }));
+  }
 
-  const errors = {};
-  if (isNaN(weightMin) && isNaN(weightMax)) {
-    errors.weight = 'Debe completar el campo "peso"';
+  if (name === 'temperaments') {
+    return measure.temperaments.value.length < 1
+      ? (setErrors({
+          [name]: 'seleccione al menos 2 temperament',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: {
+            booleano: false,
+            value: [...measure.temperaments.value, value],
+          },
+        }))
+      : (setErrors({
+          ...errors,
+          [name]: '',
+        }),
+        setMeasure({
+          ...measure,
+          [name]: {
+            booleano: true,
+            value: [...measure.temperaments.value, value],
+          },
+        }));
   }
-  if (weightMin > weightMax) {
-    errors.weight = 'Peso mínimo no puede ser mayor al peso máximo';
+  if (name === 'image' && !regexImage.test(value)) {
+    return (
+      setErrors({
+        ...errors,
+        [name]: 'error',
+      }),
+      setMeasure({
+        ...measure,
+        [name]: { booleano: false, value },
+      })
+    );
+  } else {
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+    setMeasure({
+      ...measure,
+      [name]: { booleano: true, value },
+    });
   }
-  if (isNaN(heightMin) && isNaN(heightMax)) {
-    errors.height = 'Debe completar el campo "altura"';
-  }
-  if (heightMin > heightMax) {
-    errors.height = 'Altura máxima no puede ser menor a altura mínima';
-  }
-  if (!name || !regexName.test(name)) {
-    errors.name = '"nombre" no puede tener caracteres especiales o números';
-  }
-  if (!lifeSpan) {
-    errors.lifeSpan = 'Por favor, complete este campo';
-  }
-  if (!image || !regexImage.test(image)) {
-    errors.image = 'Por favor, verifique la URL de la imagen';
-  }
-  if (!temperament) {
-    errors.temperament = 'Por favor, elija al menos un temperamento';
-  }
-
-  return errors;
 }
