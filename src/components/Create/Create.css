@@ -3,8 +3,8 @@
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  min-width: 100vh;
-  min-height: 50.3vw;
+  min-width: 100%;
+  min-height: 100vh;
 }
 
 .form {
