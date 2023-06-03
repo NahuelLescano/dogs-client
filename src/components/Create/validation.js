@@ -2,24 +2,31 @@ const regexName = /^([a-zA-Z ]+)$/i;
 const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
 
 export default function validation({
-  weight,
-  height,
+  weightMin,
+  weightMax,
+  heightMin,
+  heightMax,
   name,
   lifeSpan,
   image,
   temperament,
 }) {
+  weightMin = parseInt(weightMin);
+  weightMax = parseInt(weightMin);
+  heightMin = parseInt(heightMin);
+  heightMax = parseInt(heightMax);
+
   const errors = {};
-  if (!weight || !weight.min || !weight.max) {
+  if (isNaN(weightMin) && isNaN(weightMax)) {
     errors.weight = 'Debe completar el campo "peso"';
   }
-  if (parseInt(weight.min) > parseInt(weight.max)) {
+  if (weightMin > weightMax) {
     errors.weight = 'Peso mínimo no puede ser mayor al peso máximo';
   }
-  if (!height || !height.min || !height.max) {
+  if (isNaN(heightMin) && isNaN(heightMax)) {
     errors.height = 'Debe completar el campo "altura"';
   }
-  if (parseInt(height.min) > parseInt(height.max)) {
+  if (heightMin > heightMax) {
     errors.height = 'Altura máxima no puede ser menor a altura mínima';
   }
   if (!name || !regexName.test(name)) {
