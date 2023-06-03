@@ -24,9 +24,9 @@ export default function Details() {
       {!isLoading ? (
         <div className="container-detail">
           <button className="button-detail" onClick={() => navigate('/home')}>
-            Volver
+            Go back
           </button>
-          <h1>Detalles del perro</h1>
+          <h1>Dog details</h1>
           <img src={dog.image} alt={dog.name} className="image-detail" />
           <h2>ID: {dog.id}</h2>
           <h2>Name: {dog.name}</h2>
