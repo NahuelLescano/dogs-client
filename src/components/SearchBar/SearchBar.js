@@ -1,35 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { searchDog } from '../../redux/action-creators';
-import axios from 'axios';
 
-const { REACT_APP_GET_ALL_DOGS } = process.env;
-
-export default function SearchBar() {
+export default function SearchBar({ setPage }) {
   const [character, setCharacter] = useState('');
 
-  const onSearch = async (name) => {
-    try {
-      const response = await axios.get(
-        `${REACT_APP_GET_ALL_DOGS}/name?name=${name}`
-      );
-      setCharacter(response.data);
-    } catch ({ message }) {
-      console.log(message);
-    }
-  };
-
-  console.log(character);
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setCharacter(e.target.value);
-    dispatch(searchDog(character));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(character);
+    setPage(1);
     setCharacter('');
+    dispatch(searchDog(character));
   };
 
   return (
