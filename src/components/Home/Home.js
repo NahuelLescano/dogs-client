@@ -17,7 +17,7 @@ export default function Home() {
   const allDogs = useSelector((state) => state.allDogs);
 
   const [page, setPage] = useState(1);
-  // Variables to calculate the number of pages. 
+  // Variables to calculate the number of pages.
   const dogsPage = 8;
   const max = Math.ceil(allDogs?.length / dogsPage);
 
@@ -42,10 +42,10 @@ export default function Home() {
   return (
     <div className="home-container">
       <div className={error ? 'error' : 'no-error'}>
-        <h1>No se encontró perritos</h1>
+        <h1>Dogs not found</h1>
         <button onClick={handleClick}>X</button>
       </div>
-      <NavBar />
+      <NavBar setPage={setPage} />
       <div className="cards-container">
         {!isLoading ? (
           allDogs &&
