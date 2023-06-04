@@ -43,9 +43,11 @@ export default function Home() {
     <div className="home-container">
       <div className={error ? 'error' : 'no-error'}>
         <h1>Dogs not found</h1>
-        <button onClick={handleClick}>X</button>
+        <button className='error-button' onClick={handleClick}>X</button>
       </div>
-      <NavBar setPage={setPage} />
+
+      {!isLoading && (<NavBar setPage={setPage} />)}
+      
       <div className="cards-container">
         {!isLoading ? (
           allDogs &&
