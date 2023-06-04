@@ -17,7 +17,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value },
+        [name]: { boolean: false, value },
       })
     );
   }
@@ -29,7 +29,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value },
+        [name]: { boolean: false, value },
       })
     );
   }
@@ -46,7 +46,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value: measure[name].value },
+        [name]: { boolean: false, value: measure[name].value },
       })
     );
   }
@@ -67,7 +67,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value: measure[name].value },
+        [name]: { boolean: false, value: measure[name].value },
       })
     );
   }
@@ -90,8 +90,8 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value },
-        [aux]: { booleano: false, value: measure[aux].value },
+        [name]: { boolean: false, value },
+        [aux]: { boolean: false, value: measure[aux].value },
       })
     );
   }
@@ -110,8 +110,8 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: true, value },
-        [aux]: { booleano: true, value: measure[aux].value },
+        [name]: { boolean: true, value },
+        [aux]: { boolean: true, value: measure[aux].value },
       })
     );
   }
@@ -130,7 +130,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: true, value },
+        [name]: { boolean: true, value },
       })
     );
   }
@@ -141,14 +141,14 @@ export default function validation({
         }),
         setMeasure({
           ...measure,
-          [name]: { booleano: false, value: measure[name].value },
+          [name]: { boolean: false, value: measure[name].value },
         }))
       : (setErrors({
           [name]: '',
         }),
         setMeasure({
           ...measure,
-          [name]: { booleano: true, value },
+          [name]: { boolean: true, value },
         }));
   }
   if (name === 'life_span' && value.includes('-')) {
@@ -162,14 +162,14 @@ export default function validation({
         }),
         setMeasure({
           ...measure,
-          [name]: { booleano: false, value: measure[name].value },
+          [name]: { boolean: false, value: measure[name].value },
         }))
       : (setErrors({
           [name]: '',
         }),
         setMeasure({
           ...measure,
-          [name]: { booleano: true, value },
+          [name]: { boolean: true, value },
         }));
   }
 
@@ -181,7 +181,7 @@ export default function validation({
         setMeasure({
           ...measure,
           [name]: {
-            booleano: false,
+            boolean: false,
             value: [...measure.temperaments.value, value],
           },
         }))
@@ -192,7 +192,7 @@ export default function validation({
         setMeasure({
           ...measure,
           [name]: {
-            booleano: true,
+            boolean: true,
             value: [...measure.temperaments.value, value],
           },
         }));
@@ -205,7 +205,7 @@ export default function validation({
       }),
       setMeasure({
         ...measure,
-        [name]: { booleano: false, value },
+        [name]: { boolean: false, value },
       })
     );
   } else {
@@ -215,7 +215,7 @@ export default function validation({
     });
     setMeasure({
       ...measure,
-      [name]: { booleano: true, value },
+      [name]: { boolean: true, value },
     });
   }
 }
