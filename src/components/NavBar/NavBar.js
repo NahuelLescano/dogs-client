@@ -57,7 +57,14 @@ export default function NavBar({ setPage }) {
         <option value="ascending breed">Ascending by breed</option>
         <option value="descending breed">Descending by breed</option>
       </select>
-
+      <button
+        className="nav-button"
+        name="reset"
+        value="reset"
+        onClick={handleFilter}
+      >
+        Go back
+      </button>
       <SearchBar setPage={setPage} />
     </div>
   );
