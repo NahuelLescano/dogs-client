@@ -166,6 +166,8 @@ export default function Form() {
               </option>
             ))}
         </select>
+        {input.temperament &&
+          input.temperament.map((temper) => <p>{temper}</p>)}
         <p className="danger">{errors.temperaments}</p>
         <label htmlFor="image">Image: </label>
         <input
