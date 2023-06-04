@@ -34,7 +34,7 @@ export default function NavBar({ setPage }) {
       >
         Create dog
       </NavLink>
-      <select name="temperament" onChange={handleFilter}>
+      <select className="nav-select" name="temperament" onChange={handleFilter}>
         <option value="reset">All</option>
         {allTemperaments &&
           allTemperaments.map((temp) => (
@@ -44,13 +44,14 @@ export default function NavBar({ setPage }) {
           ))}
       </select>
 
-      <select name="create" onChange={handleFilter}>
+      <select className="nav-select" name="create" onChange={handleFilter}>
         <option value="reset">All</option>
         <option value="api">API</option>
         <option value="database">Database</option>
       </select>
 
-      <select onChange={handleOrder}>
+      <select className="nav-select" onChange={handleOrder}>
+        <option value="reset">All</option>
         <option value="ascending weight">Ascending by weight</option>
         <option value="descending weight">Descending by weight</option>
         <option value="ascending breed">Ascending by breed</option>
