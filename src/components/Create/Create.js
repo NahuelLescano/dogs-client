@@ -10,17 +10,16 @@ const { REACT_APP_GET_ALL_DOGS } = process.env;
 
 export default function Form() {
   const [measure, setMeasure] = useState({
-    weightMin: { booleano: false, value: '' },
-    weightMax: { booleano: false, value: '' },
-    heightMin: { booleano: false, value: '' },
-    heightMax: { booleano: false, value: '' },
-    name: { booleano: false, value: '' },
-    life_span: { booleano: false, value: '' },
-    image: { booleano: false, value: '' },
-    temperaments: { booleano: false, value: [] },
+    weightMin: { boolean: false, value: '' },
+    weightMax: { boolean: false, value: '' },
+    heightMin: { boolean: false, value: '' },
+    heightMax: { boolean: false, value: '' },
+    name: { boolean: false, value: '' },
+    life_span: { boolean: false, value: '' },
+    image: { boolean: false, value: '' },
+    temperaments: { boolean: false, value: [] },
   });
 
-  // eslint-disable-next-line
   const [errors, setErrors] = useState({
     weightMin: '',
     weightMax: '',
@@ -29,10 +28,10 @@ export default function Form() {
     name: '',
     life_span: '',
     image: '',
-    temperaments: 'Selecciona al menos 2 temperamentos',
+    temperaments: '',
   });
 
-  let input = {
+  const input = {
     weight: {},
     height: {},
     name: '',
@@ -44,24 +43,23 @@ export default function Form() {
   const allTemperaments = useSelector((state) => state.temperaments);
   const dispatch = useDispatch();
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     validation({ name, value, errors, setErrors, measure, setMeasure });
   };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     if (
-      measure.weightMin.booleano &&
-      measure.weightMax.booleano &&
-      measure.heightMin.booleano &&
-      measure.heightMax.booleano &&
-      measure.name.booleano &&
-      measure.life_span.booleano &&
-      measure.image.booleano &&
-      measure.temperaments.booleano
+      measure.weightMin.boolean &&
+      measure.weightMax.boolean &&
+      measure.heightMin.boolean &&
+      measure.heightMax.boolean &&
+      measure.name.boolean &&
+      measure.life_span.boolean &&
+      measure.image.boolean &&
+      measure.temperaments.boolean
     ) {
-      console.log('complete');
       input.weight = {
         metric: `${measure.weightMin.value} - ${measure.weightMax.value}`,
       };
@@ -73,16 +71,13 @@ export default function Form() {
       input.life_span = measure.life_span.value;
       input.temperament = measure.temperaments.value;
       input.image = measure.image.value;
-      console.log(input);
-    } else {
-      console.log('not complete');
     }
 
     try {
       const response = await axios.post(REACT_APP_GET_ALL_DOGS, input);
-      alert(response.data);
+      alert(response.message);
     } catch (error) {
-      alert(error.message);
+      alert(error.response.data.message);
     }
   };
 
@@ -96,78 +91,74 @@ export default function Form() {
   return (
     <div className="create-container">
       <button className="create-button" onClick={() => navigate('/home')}>
-        Atrás
+        Go back
       </button>
       <form className="form" onSubmit={handleSubmit}>
-        <h1>Crear perro</h1>
-        <label>Peso (kg): </label>
-        <label htmlFor="min">Mínimo: </label>
+        <h1>Create a dog</h1>
+        <label>Weight (kg): </label>
+        <label htmlFor="min">Minimum: </label>
         <input
           id="min"
           name="weightMin"
-          placeholder="Ingrese el peso min..."
+          placeholder="Enter the minimum..."
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.weightMin}</p>
-        <label htmlFor="max">Máximo: </label>
+        <p className="danger">{errors.weightMin}</p>
+        <label htmlFor="max">Maximum: </label>
         <input
           id="max"
           name="weightMax"
-          placeholder="Ingrese el peso max..."
+          placeholder="Enter the maximum..."
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.weightMax}</p>
-        <br />
-        <label htmlFor="height">Altura (cm): </label>
-        <label htmlFor="min">Mínimo: </label>
+        <p className="danger">{errors.weightMax}</p>
+        <label htmlFor="height">Height (cm): </label>
+        <label htmlFor="min">Minimum: </label>
         <input
           id="min"
           name="heightMin"
-          placeholder="Ingrese la altura min..."
+          placeholder="Enter the minimum..."
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.heightMin}</p>
-        <label htmlFor="max">Máximo: </label>
+        <p className="danger">{errors.heightMin}</p>
+        <label htmlFor="max">Maximum: </label>
         <input
           id="max"
           name="heightMax"
-          placeholder="Ingrese el altura max..."
+          placeholder="Enter the maximum..."
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.heightMax}</p>
-        <br />
-        <label htmlFor="name">Nombre: </label>
+        <p className="danger">{errors.heightMax}</p>
+        <label htmlFor="name">Name: </label>
         <input
           id="name"
           name="name"
-          placeholder="Ingrese el nombre..."
+          placeholder="Enter the name..."
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.name}</p>
-        <br />
-        <label htmlFor="life_span">Tiempo de vida: </label>
+        <p className="danger">{errors.name}</p>
+        <label htmlFor="life_span">Life span: </label>
         <input
           id="life_span"
           name="life_span"
-          placeholder="min - max años"
+          placeholder="min - max"
           onChange={handleInputChange}
           className="create-input"
         />
-        <p>{errors.life_span}</p>
-        <br />
-        <label htmlFor="temperaments">Temperamento: </label>
+        <p className="danger">{errors.life_span}</p>
+        <label htmlFor="temperaments">Temperaments: </label>
         <select
           id="temperaments"
           name="temperaments"
           onChange={handleInputChange}
           className="create-input"
         >
-          <option>Seleccione un temperamento</option>
+          <option>Choose at least two</option>
           {allTemperaments &&
             allTemperaments.map((temp) => (
               <option className="create-input" key={temp.id} value={temp.id}>
@@ -175,20 +166,19 @@ export default function Form() {
               </option>
             ))}
         </select>
-        <p>{errors.temperaments}</p>
-        <br />
-        <label htmlFor="image">Imagen: </label>
+        <p className="danger">{errors.temperaments}</p>
+        <label htmlFor="image">Image: </label>
         <input
           id="image"
           name="image"
           type="url"
-          placeholder="URL de la imagen"
+          placeholder="Enter the URL..."
           className="create-input"
           onChange={handleInputChange}
         />
-        <p>{errors.image}</p>
+        <p className="danger">{errors.image}</p>
         <button className="create-button" type="submit">
-          Enviar
+          Create
         </button>
       </form>
     </div>
