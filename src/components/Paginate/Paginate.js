@@ -9,10 +9,10 @@ export default function Paginate({ max, page, setPage }) {
 
   const handleClickMove = (e) => {
     const { name } = e.target;
-    if (name === 'avanzar') {
+    if (name === 'next') {
       page + 1 > max ? setPage(1) : setPage(page + 1);
     }
-    if (name === 'retroceder') {
+    if (name === 'previous') {
       page === 1 ? setPage(max) : setPage(page - 1);
     }
   };
@@ -25,10 +25,10 @@ export default function Paginate({ max, page, setPage }) {
     <div className="pag-container">
       <button
         className={page === 1 ? 'disable-prev' : 'pag-button'}
-        name="retroceder"
+        name="previous"
         onClick={handleClickMove}
       >
-        Retroceder
+        Previous
       </button>
       {pagination.map((pag, index) => (
         <button
@@ -43,10 +43,10 @@ export default function Paginate({ max, page, setPage }) {
       ))}
       <button
         className={page === max ? 'disable-next' : 'pag-button'}
-        name="avanzar"
+        name="next"
         onClick={handleClickMove}
       >
-        Siguiente
+        Next
       </button>
     </div>
   );
