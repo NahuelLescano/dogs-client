@@ -40,3 +40,22 @@
   border-radius: 1rem;
   border: 2px solid gray;
 }
+
+.nav-button {
+  margin-top: 2px;
+  margin-left: 9px;
+  border-radius: 1rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #237edf;
+  color: white;
+  transition: 0.2s;
+  height: 1.5rem;
+}
+
+.nav-button:hover {
+  color: #237edf;
+  background-color: white;
+  font-size: 1rem;
+}
