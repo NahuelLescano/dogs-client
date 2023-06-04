@@ -13,7 +13,7 @@ export default function validation({
     return (
       setErrors({
         ...errors,
-        [name]: 'Debes completar la informacion',
+        [name]: 'Provide the necessary info.',
       }),
       setMeasure({
         ...measure,
@@ -25,7 +25,7 @@ export default function validation({
     return (
       setErrors({
         ...errors,
-        [name]: '"nombre" no puede tener caracteres especiales o números',
+        [name]: 'It cannot have especial caracters or numbers.',
       }),
       setMeasure({
         ...measure,
@@ -42,7 +42,7 @@ export default function validation({
     return (
       setErrors({
         ...errors,
-        [name]: 'Solo puedes ingresar numeros',
+        [name]: 'Only numbers.',
       }),
       setMeasure({
         ...measure,
@@ -63,7 +63,7 @@ export default function validation({
     return (
       setErrors({
         ...errors,
-        [name]: `${name} debe ser mayor`,
+        [name]: 'Maximum must be greater than minimum.',
       }),
       setMeasure({
         ...measure,
@@ -85,7 +85,7 @@ export default function validation({
     return (
       setErrors({
         ...errors,
-        [aux]: `${aux} debe ser mayor`,
+        [aux]: `${aux} must be maximum`,
         [name]: '',
       }),
       setMeasure({
@@ -176,7 +176,7 @@ export default function validation({
   if (name === 'temperaments') {
     return measure.temperaments.value.length < 1
       ? (setErrors({
-          [name]: 'seleccione al menos 2 temperament',
+          [name]: 'Choose at least 2 temperaments',
         }),
         setMeasure({
           ...measure,
