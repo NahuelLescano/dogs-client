@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { searchDog } from '../../redux/action-creators';
+import './SearchBar.css';
 
 export default function SearchBar({ setPage }) {
   const [character, setCharacter] = useState('');
@@ -18,15 +19,18 @@ export default function SearchBar({ setPage }) {
   };
 
   return (
-    <div>
+    <div className="search-container">
       <form onSubmit={handleSubmit}>
         <input
           value={character}
           onChange={handleChange}
           type="search"
-          placeholder="Buscar perro"
+          placeholder="Search by name..."
+          className="search-input"
         />
-        <button type="submit">Buscar</button>
+        <button className="search-button" type="submit">
+          Search
+        </button>
       </form>
     </div>
   );
