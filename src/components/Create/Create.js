@@ -68,14 +68,16 @@ export default function Form() {
         metric: `${measure.heightMin.value} - ${measure.heightMax.value}`,
       };
       input.name = measure.name.value;
-      input.life_span = measure.life_span.value;
+      input.life_span = `${measure.life_span.value} years`;
       input.temperament = measure.temperaments.value;
       input.image = measure.image.value;
     }
 
+    console.log(measure);
+
     try {
-      const response = await axios.post(REACT_APP_GET_ALL_DOGS, input);
-      alert(response.message);
+      await axios.post(REACT_APP_GET_ALL_DOGS, input);
+      alert('Dog was successfully created.');
     } catch (error) {
       alert(error.response.data.message);
     }
