@@ -73,8 +73,6 @@ export default function Form() {
       input.image = measure.image.value;
     }
 
-    console.log(measure);
-
     try {
       await axios.post(REACT_APP_GET_ALL_DOGS, input);
       alert('Dog was successfully created.');
