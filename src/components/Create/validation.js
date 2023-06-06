@@ -50,90 +50,6 @@ export default function validation({
       })
     );
   }
-  if (
-    (name === 'weightMax' &&
-      parseInt(value) < parseInt(measure.weightMin.value)) ||
-    (name === 'heightMax' &&
-      parseInt(value) < parseInt(measure.heightMin.value)) ||
-    (name === 'weightMax' &&
-      parseInt(value) === parseInt(measure.weightMin.value)) ||
-    (name === 'heightMax' &&
-      parseInt(value) === parseInt(measure.heightMin.value))
-  ) {
-    return (
-      setErrors({
-        ...errors,
-        [name]: 'Maximum must be greater than minimum.',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value: measure[name].value },
-      })
-    );
-  }
-  if (
-    (name === 'weightMin' &&
-      parseInt(value) > parseInt(measure.weightMax.value)) ||
-    (name === 'heightMin' &&
-      parseInt(value) > parseInt(measure.heightMax.value)) ||
-    (name === 'weightMin' &&
-      parseInt(value) === parseInt(measure.weightMax.value)) ||
-    (name === 'heightMin' &&
-      parseInt(value) === parseInt(measure.heightMax.value))
-  ) {
-    const aux = name === 'weightMin' ? 'weightMax' : 'heightMax';
-    return (
-      setErrors({
-        ...errors,
-        [aux]: `${aux} must be maximum`,
-        [name]: '',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value },
-        [aux]: { boolean: false, value: measure[aux].value },
-      })
-    );
-  }
-  if (
-    (name === 'weightMax' &&
-      parseInt(value) > parseInt(measure.weightMin.value)) ||
-    (name === 'heightMax' &&
-      parseInt(value) > parseInt(measure.heightMin.value))
-  ) {
-    const aux = name === 'weightMax' ? 'weightMin' : 'heightMin';
-    return (
-      setErrors({
-        ...errors,
-        [name]: '',
-        [aux]: '',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: true, value },
-        [aux]: { boolean: true, value: measure[aux].value },
-      })
-    );
-  }
-  if (
-    (name === 'weightMin' &&
-      parseInt(value) < parseInt(measure.weightMax.value)) ||
-    (name === 'heightMin' &&
-      parseInt(value) < parseInt(measure.heightMax.value))
-  ) {
-    const aux = name === 'weightMin' ? 'weightMax' : 'heightMax';
-    return (
-      setErrors({
-        ...errors,
-        [name]: '',
-        [aux]: '',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: true, value },
-      })
-    );
-  }
   if (name === 'life_span' && !value.includes('-')) {
     return isNaN(value)
       ? (setErrors({
@@ -151,28 +67,6 @@ export default function validation({
           [name]: { boolean: true, value },
         }));
   }
-  if (name === 'life_span' && value.includes('-')) {
-    const aux = value.split('-');
-    var number = aux.every((valor) => {
-      return !isNaN(valor);
-    });
-    return !number || aux.length < 1
-      ? (setErrors({
-          [name]: 'error',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: { boolean: false, value: measure[name].value },
-        }))
-      : (setErrors({
-          [name]: '',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: { boolean: true, value },
-        }));
-  }
-
   if (name === 'temperaments') {
     return measure.temperaments.value.length < 1
       ? (setErrors({
