@@ -12,6 +12,13 @@
   color: white;
 }
 
+.detail-group {
+  border: 2px solid gray;
+  border-radius: 1rem;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+}
+
 .image-detail {
   width: 400px;
   height: 21.6em;
@@ -22,8 +29,8 @@
 
 .button-detail {
   font-size: 0.8rem;
-  width: 8%;
-  height: 3vh;
+  width: 20%;
+  height: 4vh;
   background-color: #003d7f;
   color: white;
   border: none;
@@ -37,4 +44,12 @@
   background-color: red;
   color: white;
   font-size: 0.9rem;
+}
+
+.temp-select {
+  margin-top: 2px;
+  border-radius: 1rem;
+  border: 2px solid gray;
+  margin-bottom: 2%;
+  width: 40%;
 }
