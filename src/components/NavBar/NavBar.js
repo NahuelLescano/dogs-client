@@ -28,12 +28,15 @@ export default function NavBar({ setPage }) {
 
   return (
     <div className="nav-container">
-      <NavLink
-        className={({ isActive }) => !isActive && 'disable'}
-        to="/create"
-      >
-        Create dog
-      </NavLink>
+      <button className="dog-button">
+        <NavLink
+          className={({ isActive }) => !isActive && 'disable'}
+          to="/create"
+        >
+          Create dog
+        </NavLink>
+      </button>
+      <label>Filter by temperament: </label>
       <select className="nav-select" name="temperament" onChange={handleFilter}>
         <option value="reset">All</option>
         {allTemperaments &&
@@ -44,12 +47,14 @@ export default function NavBar({ setPage }) {
           ))}
       </select>
 
+      <label>Filter by api/database: </label>
       <select className="nav-select" name="create" onChange={handleFilter}>
         <option value="reset">All</option>
         <option value="api">API</option>
         <option value="database">Database</option>
       </select>
 
+      <label>Sort: </label>
       <select className="nav-select" onChange={handleOrder}>
         <option value="reset">All</option>
         <option value="ascending weight">Ascending by weight</option>
