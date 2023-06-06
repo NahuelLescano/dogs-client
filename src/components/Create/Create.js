@@ -88,9 +88,10 @@ export default function Form() {
 
   const navigate = useNavigate();
 
+  const handleClick = () => navigate('/home');
   return (
     <div className="create-container">
-      <button className="back-button" onClick={() => navigate('/home')}>
+      <button className="back-button" onClick={handleClick}>
         Go back
       </button>
       <form className="form" onSubmit={handleSubmit}>
