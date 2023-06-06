@@ -90,7 +90,7 @@ export default function Form() {
 
   return (
     <div className="create-container">
-      <button className="create-button" onClick={() => navigate('/home')}>
+      <button className="back-button" onClick={() => navigate('/home')}>
         Go back
       </button>
       <form className="form" onSubmit={handleSubmit}>
@@ -166,8 +166,15 @@ export default function Form() {
               </option>
             ))}
         </select>
-        {input.temperament &&
-          input.temperament.map((temper) => <p>{temper}</p>)}
+        {measure.temperaments.value &&
+          measure.temperaments.value.map((temper) => (
+            <div key={temper.id}>
+              {
+                allTemperaments.find((temp) => temp.id === parseInt(temper))
+                  .name
+              }
+            </div>
+          ))}
         <p className="danger">{errors.temperaments}</p>
         <label htmlFor="image">Image: </label>
         <input
