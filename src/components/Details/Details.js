@@ -19,20 +19,28 @@ export default function Details() {
       .then(() => setIsLoading(false));
   }, [id]);
 
+  const handleClick = () => navigate('/home');
   return (
     <div>
       {!isLoading ? (
         <div className="container-detail">
-          <button className="button-detail" onClick={() => navigate('/home')}>
+          <div className="detail-group">
+            <h1>Dog details</h1>
+            <img src={dog.image} alt={dog.name} className="image-detail" />
+            <h2>ID: {dog.id}</h2>
+            <h2>Name: {dog.name}</h2>
+            <h2>Height: {dog.height?.metric} cm</h2>
+            <h2>Weight: {dog.weight?.metric} kg</h2>
+            <h2>Life span: {dog.life_span}</h2>
+            <select className="temp-select">
+              {dog.temperament.split(', ').map((temp, index) => (
+                <option key={index}>{temp}</option>
+              ))}
+            </select>
+          </div>
+          <button className="button-detail" onClick={handleClick}>
             Go back
           </button>
-          <h1>Dog details</h1>
-          <img src={dog.image} alt={dog.name} className="image-detail" />
-          <h2>ID: {dog.id}</h2>
-          <h2>Name: {dog.name}</h2>
-          <h2>Height: {dog.height?.metric} cm</h2>
-          <h2>Weight: {dog.weight?.metric} kg</h2>
-          <h2>Life span: {dog.life_span}</h2>
         </div>
       ) : (
         <div>
