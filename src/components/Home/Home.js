@@ -39,15 +39,18 @@ export default function Home() {
     dispatch(setError());
   };
 
+  // allDogs.map((dog) => console.log(dog.temperament));
   return (
     <div className="home-container">
       <div className={error ? 'error' : 'no-error'}>
         <h1>Dogs not found</h1>
-        <button className='error-button' onClick={handleClick}>X</button>
+        <button className="error-button" onClick={handleClick}>
+          X
+        </button>
       </div>
 
-      {!isLoading && (<NavBar setPage={setPage} />)}
-      
+      {!isLoading && <NavBar setPage={setPage} />}
+
       <div className="cards-container">
         {!isLoading ? (
           allDogs &&
@@ -59,6 +62,7 @@ export default function Home() {
                   id={dog.id}
                   name={dog.name}
                   lifeSpan={dog.life_span}
+                  temperament={dog.temperament}
                   image={dog.image}
                 />
               </div>
