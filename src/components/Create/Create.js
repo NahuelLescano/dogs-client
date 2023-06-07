@@ -41,19 +41,17 @@ export default function Form() {
   const [temperSelect, setTemperSelect] = useState([]);
 
   const handleInputChange = (e) => {
-    if (e.target.name !== 'temperaments') {
-      setErrors(
-        validation({
-          ...userInputs,
-          [e.target.name]: e.target.value,
-        })
-      );
-
-      setUserInputs({
+    setErrors(
+      validation({
         ...userInputs,
         [e.target.name]: e.target.value,
-      });
-    }
+      })
+    );
+
+    setUserInputs({
+      ...userInputs,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSelectChange = (e) => {
@@ -82,15 +80,20 @@ export default function Form() {
       Object.values(errors).every((error) => error === '') &&
       userInputs.temperaments.length >= 2
     ) {
-      userInputs.weight = {
-        metric: `${userInputs.weightMin} - ${userInputs.weightMax}`,
+      const inputs = {
+        image: userInputs.image,
+        name: userInputs.name,
+        weight: {
+          metric: `${userInputs.weightMin} - ${userInputs.weightMax}`,
+        },
+        height: {
+          metric: `${userInputs.heightMin} - ${userInputs.heightMax}`,
+        },
+        life_span: `${userInputs.life_span} years`,
+        temperaments: userInputs.temperaments,
       };
 
-      userInputs.height = {
-        metric: `${userInputs.heightMin} - ${userInputs.heightMax}`,
-      };
-      userInputs.life_span = `${userInputs.life_span} years`;
-
+      console.log(inputs);
       setErrors(
         validation({
           weightMin: '',
@@ -103,13 +106,13 @@ export default function Form() {
           temperaments: '',
         })
       );
-    }
 
-    try {
-      await axios.post(REACT_APP_GET_ALL_DOGS, userInputs);
-      alert('Dog was successfully created');
-    } catch (error) {
-      alert('Something went wrong, check your inputs.');
+      try {
+        await axios.post(REACT_APP_GET_ALL_DOGS, inputs);
+        alert('Dog was successfully created');
+      } catch (error) {
+        alert('Something went wrong, check your inputs.');
+      }
     }
   };
 
