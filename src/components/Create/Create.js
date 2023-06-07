@@ -9,17 +9,6 @@ import './Create.css';
 const { REACT_APP_GET_ALL_DOGS } = process.env;
 
 export default function Form() {
-  const [measure, setMeasure] = useState({
-    weightMin: { boolean: false, value: '' },
-    weightMax: { boolean: false, value: '' },
-    heightMin: { boolean: false, value: '' },
-    heightMax: { boolean: false, value: '' },
-    name: { boolean: false, value: '' },
-    life_span: { boolean: false, value: '' },
-    image: { boolean: false, value: '' },
-    temperaments: { boolean: false, value: [] },
-  });
-
   const [errors, setErrors] = useState({
     weightMin: '',
     weightMax: '',
@@ -31,71 +20,109 @@ export default function Form() {
     temperaments: '',
   });
 
-  const input = {
-    weight: {},
-    height: {},
+  const [userInputs, setUserInputs] = useState({
+    weightMin: '',
+    weightMax: '',
+    heightMin: '',
+    heightMax: '',
     name: '',
     life_span: '',
     image: '',
-    temperament: [],
-  };
+    temperaments: [],
+  });
 
   const allTemperaments = useSelector((state) => state.temperaments);
   const dispatch = useDispatch();
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    validation({ name, value, errors, setErrors, measure, setMeasure });
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      measure.weightMin.boolean &&
-      measure.weightMax.boolean &&
-      measure.heightMin.boolean &&
-      measure.heightMax.boolean &&
-      measure.name.boolean &&
-      measure.life_span.boolean &&
-      measure.image.boolean &&
-      measure.temperaments.boolean
-    ) {
-      input.weight = {
-        metric: `${measure.weightMin.value} - ${measure.weightMax.value}`,
-      };
-
-      input.height = {
-        metric: `${measure.heightMin.value} - ${measure.heightMax.value}`,
-      };
-      input.name = measure.name.value;
-      input.life_span = `${measure.life_span.value} years`;
-      input.temperament = measure.temperaments.value;
-      input.image = measure.image.value;
-    }
-
-    try {
-      await axios.post(REACT_APP_GET_ALL_DOGS, input);
-      alert('Dog was successfully created.');
-    } catch (error) {
-      alert(error.response.data.message);
-    }
-  };
-
   useEffect(() => {
     dispatch(getAllTemperaments());
     // eslint-disable-next-line
   }, []);
 
-  const navigate = useNavigate();
+  const [temperSelect, setTemperSelect] = useState([]);
 
+  const handleInputChange = (e) => {
+    if (e.target.name !== 'temperaments') {
+      setErrors(
+        validation({
+          ...userInputs,
+          [e.target.name]: e.target.value,
+        })
+      );
+
+      setUserInputs({
+        ...userInputs,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  const handleSelectChange = (e) => {
+    setErrors(
+      validation({
+        ...userInputs,
+        temperaments: e.target.value,
+      })
+    );
+
+    setUserInputs({
+      ...userInputs,
+      temperaments: [...userInputs.temperaments, e.target.value],
+    });
+
+    const temper = allTemperaments.filter((temp) =>
+      temp.id.toString().includes(e.target.value.toString())
+    );
+    setTemperSelect([...temperSelect, temper.find((temp) => temp.name)]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      Object.values(errors).every((error) => error === '') &&
+      userInputs.temperaments.length >= 2
+    ) {
+      userInputs.weight = {
+        metric: `${userInputs.weightMin} - ${userInputs.weightMax}`,
+      };
+
+      userInputs.height = {
+        metric: `${userInputs.heightMin} - ${userInputs.heightMax}`,
+      };
+      userInputs.life_span = `${userInputs.life_span} years`;
+
+      setErrors(
+        validation({
+          weightMin: '',
+          weightMax: '',
+          heightMin: '',
+          heightMax: '',
+          name: '',
+          life_span: '',
+          image: '',
+          temperaments: '',
+        })
+      );
+    }
+
+    try {
+      await axios.post(REACT_APP_GET_ALL_DOGS, userInputs);
+      alert('Dog was successfully created');
+    } catch (error) {
+      alert('Something went wrong, check your inputs.');
+    }
+  };
+
+  const navigate = useNavigate();
   const handleClick = () => navigate('/home');
+
   return (
     <div className="create-container">
       <button className="back-button" onClick={handleClick}>
         Go back
       </button>
       <form className="form" onSubmit={handleSubmit}>
-        <h1>Create a dog</h1>
+        <h1>Create your dog</h1>
         <label>Weight (kg): </label>
         <label htmlFor="min">Minimum: </label>
         <input
@@ -156,7 +183,7 @@ export default function Form() {
         <select
           id="temperaments"
           name="temperaments"
-          onChange={handleInputChange}
+          onChange={handleSelectChange}
           className="create-input"
         >
           <option>Choose at least two</option>
@@ -167,15 +194,14 @@ export default function Form() {
               </option>
             ))}
         </select>
-        {measure.temperaments.value &&
-          measure.temperaments.value.map((temper) => (
-            <div key={temper.id}>
-              {
-                allTemperaments.find((temp) => temp.id === parseInt(temper))
-                  .name
-              }
-            </div>
-          ))}
+        <div>
+          {temperSelect &&
+            temperSelect.map((temp) => (
+              <p className="temper-selected" key={temp.id}>
+                {temp.name}
+              </p>
+            ))}
+        </div>
         <p className="danger">{errors.temperaments}</p>
         <label htmlFor="image">Image: </label>
         <input
