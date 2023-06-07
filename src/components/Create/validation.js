@@ -1,115 +1,94 @@
-const regexName = /^([a-zA-Z ]+)$/i;
-const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
-
 export default function validation({
-  name,
-  value,
-  errors,
-  setErrors,
-  measure,
-  setMeasure,
+    weightMin,
+    weightMax,
+    heightMin,
+    heightMax,
+    name,
+    life_span,
+    image,
+    temperaments,
 }) {
-  if (value === '') {
-    return (
-      setErrors({
-        ...errors,
-        [name]: 'Provide the necessary info.',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value },
-      })
-    );
+  const regexName = /^([a-zA-Z ]+)$/i;
+  const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
+  const errors = {};
+
+  if (name === '') {
+    errors.name = 'Provide the necessary info.';
+  } else if (!regexName.test(name)) {
+    errors.name = 'It cannot have special characters or numbers.';
   }
-  if (name === 'name' && !regexName.test(value)) {
-    return (
-      setErrors({
-        ...errors,
-        [name]: 'It cannot have especial caracters or numbers.',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value },
-      })
-    );
-  }
+
   if (
-    (name === 'weightMin' && isNaN(value)) ||
-    (name === 'weightMax' && isNaN(value)) ||
-    (name === 'heightMin' && isNaN(value)) ||
-    (name === 'heightMax' && isNaN(value))
+    isNaN(weightMin) ||
+    isNaN(weightMax) ||
+    isNaN(heightMin) ||
+    isNaN(heightMax)
   ) {
-    return (
-      setErrors({
-        ...errors,
-        [name]: 'Only numbers.',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value: measure[name].value },
-      })
-    );
+    errors.weightMin = 'Only numbers.';
+    errors.weightMax = 'Only numbers.';
+    errors.heightMin = 'Only numbers.';
+    errors.heightMax = 'Only numbers.';
   }
-  if (name === 'life_span' && !value.includes('-')) {
-    return isNaN(value)
-      ? (setErrors({
-          [name]: 'error',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: { boolean: false, value: measure[name].value },
-        }))
-      : (setErrors({
-          [name]: '',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: { boolean: true, value },
-        }));
+
+  if (
+    parseInt(weightMax) < parseInt(weightMin) ||
+    parseInt(heightMax) < parseInt(heightMin)
+  ) {
+    errors.weightMax = 'Maximum must be greater than minimum.';
+    errors.heightMax = 'Maximum must be greater than minimum.';
   }
-  if (name === 'temperaments') {
-    return measure.temperaments.value.length < 1
-      ? (setErrors({
-          [name]: 'Choose at least 2 temperaments',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: {
-            boolean: false,
-            value: [...measure.temperaments.value, value],
-          },
-        }))
-      : (setErrors({
-          ...errors,
-          [name]: '',
-        }),
-        setMeasure({
-          ...measure,
-          [name]: {
-            boolean: true,
-            value: [...measure.temperaments.value, value],
-          },
-        }));
+
+  if (
+    parseInt(weightMin) > parseInt(weightMax) ||
+    parseInt(heightMin) > parseInt(heightMax)
+  ) {
+    errors.weightMin = '';
+    errors.weightMax = 'weightMax must be maximum';
+    errors.heightMin = '';
+    errors.heightMax = 'heightMax must be maximum';
   }
-  if (name === 'image' && !regexImage.test(value)) {
-    return (
-      setErrors({
-        ...errors,
-        [name]: 'error',
-      }),
-      setMeasure({
-        ...measure,
-        [name]: { boolean: false, value },
-      })
-    );
+
+  if (
+    parseInt(weightMax) > parseInt(weightMin) ||
+    parseInt(heightMax) > parseInt(heightMin)
+  ) {
+    errors.weightMin = '';
+    errors.weightMax = '';
+    errors.heightMin = '';
+    errors.heightMax = '';
+  }
+
+  if (life_span === '') {
+    errors.life_span = 'Provide the necessary info.';
+  } else if (!life_span.includes('-')) {
+    if (isNaN(life_span)) {
+      errors.life_span = 'error';
+    } else {
+      errors.life_span = '';
+    }
   } else {
-    setErrors({
-      ...errors,
-      [name]: '',
+    const aux = life_span.split('-');
+    const number = aux.every((value) => {
+      return !isNaN(value);
     });
-    setMeasure({
-      ...measure,
-      [name]: { boolean: true, value },
-    });
+    if (!number || aux.length < 1) {
+      errors.life_span = 'error';
+    } else {
+      errors.life_span = '';
+    }
   }
+
+  if (temperaments.length < 1) {
+    errors.temperaments = 'Choose at least 2 temperaments';
+  } else {
+    errors.temperaments = '';
+  }
+
+  if (image === '' || !regexImage.test(image)) {
+    errors.image = 'error';
+  } else {
+    errors.image = '';
+  }
+
+  return errors;
 }
