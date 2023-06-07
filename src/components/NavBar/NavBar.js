@@ -33,7 +33,7 @@ export default function NavBar({ setPage }) {
           className={({ isActive }) => !isActive && 'disable'}
           to="/create"
         >
-          Create dog
+          Create your dog
         </NavLink>
       </button>
       <label>Filter by temperament: </label>
