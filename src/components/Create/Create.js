@@ -93,7 +93,6 @@ export default function Form() {
         temperaments: userInputs.temperaments,
       };
 
-      console.log(inputs);
       setErrors(
         validation({
           weightMin: '',
