@@ -18,6 +18,7 @@ export default function Details() {
       .then((response) => setDog(response.data))
       .then(() => setIsLoading(false));
   }, [id]);
+  console.log(dog);
 
   const handleClick = () => navigate('/home');
   return (
@@ -33,7 +34,7 @@ export default function Details() {
             <h2>Weight: {dog.weight?.metric} kg</h2>
             <h2>Life span: {dog.life_span}</h2>
             <select className="temp-select">
-              {dog.temperament.split(', ').map((temp, index) => (
+              {dog.temperament?.split(', ').map((temp, index) => (
                 <option key={index}>{temp}</option>
               ))}
             </select>
