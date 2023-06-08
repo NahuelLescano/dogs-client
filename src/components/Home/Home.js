@@ -39,7 +39,6 @@ export default function Home() {
     dispatch(setError());
   };
 
-  // allDogs.map((dog) => console.log(dog.temperament));
   return (
     <div className="home-container">
       <div className={error ? 'error' : 'no-error'}>
