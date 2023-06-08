@@ -18,9 +18,9 @@ export default function Details() {
       .then((response) => setDog(response.data))
       .then(() => setIsLoading(false));
   }, [id]);
-  console.log(dog);
 
   const handleClick = () => navigate('/home');
+
   return (
     <div>
       {!isLoading ? (
@@ -34,9 +34,13 @@ export default function Details() {
             <h2>Weight: {dog.weight?.metric} kg</h2>
             <h2>Life span: {dog.life_span}</h2>
             <select className="temp-select">
-              {dog.temperament?.split(', ').map((temp, index) => (
-                <option key={index}>{temp}</option>
-              ))}
+              {dog.temperament
+                ? dog.temperament
+                    .split(', ')
+                    .map((temp, index) => <option key={index}>{temp}</option>)
+                : dog.Temperaments.map((temp) => (
+                    <option key={temp.id}>{temp.name}</option>
+                  ))}
             </select>
           </div>
           <button className="button-detail" onClick={handleClick}>
