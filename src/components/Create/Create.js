@@ -17,7 +17,7 @@ export default function Form() {
     name: '',
     life_span: '',
     image: '',
-    temperaments: '',
+    temperament: '',
   });
 
   const [userInputs, setUserInputs] = useState({
@@ -28,8 +28,10 @@ export default function Form() {
     name: '',
     life_span: '',
     image: '',
-    temperaments: [],
+    temperament: [],
   });
+
+  const [temperSelect, setTemperSelect] = useState([]);
 
   const allTemperaments = useSelector((state) => state.temperaments);
   const dispatch = useDispatch();
@@ -37,8 +39,6 @@ export default function Form() {
     dispatch(getAllTemperaments());
     // eslint-disable-next-line
   }, []);
-
-  const [temperSelect, setTemperSelect] = useState([]);
 
   const handleInputChange = (e) => {
     setErrors(
@@ -58,19 +58,20 @@ export default function Form() {
     setErrors(
       validation({
         ...userInputs,
-        temperaments: e.target.value,
+        temperament: e.target.value,
       })
     );
 
     setUserInputs({
       ...userInputs,
-      temperaments: [...userInputs.temperaments, e.target.value],
+      temperament: [...userInputs.temperament, e.target.value],
     });
 
-    const temper = allTemperaments.filter((temp) =>
-      temp.id.toString().includes(e.target.value.toString())
-    );
-    setTemperSelect([...temperSelect, temper.find((temp) => temp.name)]);
+    if (temperSelect.includes(e.target.value)) {
+      alert('It was already selected.');
+    } else {
+      setTemperSelect([...temperSelect, e.target.value]);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -78,7 +79,7 @@ export default function Form() {
 
     if (
       Object.values(errors).every((error) => error === '') &&
-      userInputs.temperaments.length >= 2
+      userInputs.temperament.length >= 2
     ) {
       const inputs = {
         image: userInputs.image,
@@ -90,28 +91,30 @@ export default function Form() {
           metric: `${userInputs.heightMin} - ${userInputs.heightMax}`,
         },
         life_span: `${userInputs.life_span} years`,
-        temperaments: userInputs.temperaments,
+        temperament: userInputs.temperament,
       };
 
-      setErrors(
-        validation({
-          weightMin: '',
-          weightMax: '',
-          heightMin: '',
-          heightMax: '',
-          name: '',
-          life_span: '',
-          image: '',
-          temperaments: '',
-        })
-      );
-
+      setUserInputs({
+        weightMin: '',
+        weightMax: '',
+        heightMin: '',
+        heightMax: '',
+        name: '',
+        life_span: '',
+        image: '',
+        temperament: [],
+      });
       try {
-        await axios.post(REACT_APP_GET_ALL_DOGS, inputs);
-        alert('Dog was successfully created');
+        const response = await axios.post(REACT_APP_GET_ALL_DOGS, inputs);
+        alert(response?.message || 'Dog was successfully created.');
       } catch (error) {
-        alert('Something went wrong, check your inputs.');
+        alert(
+          error.response?.data?.message ||
+            'Something went wrong, check your inputs.'
+        );
       }
+    } else {
+      alert('Something went wrong, check your inputs.');
     }
   };
 
@@ -181,30 +184,22 @@ export default function Form() {
           className="create-input"
         />
         <p className="danger">{errors.life_span}</p>
-        <label htmlFor="temperaments">Temperaments: </label>
+        <label htmlFor="temperament">Temperaments: </label>
         <select
-          id="temperaments"
-          name="temperaments"
+          id="temperament"
+          name="temperament"
           onChange={handleSelectChange}
           className="create-input"
         >
           <option>Choose at least two</option>
           {allTemperaments &&
             allTemperaments.map((temp) => (
-              <option className="create-input" key={temp.id} value={temp.id}>
+              <option className="create-input" key={temp.id} value={temp.name}>
                 {temp.name}
               </option>
             ))}
         </select>
-        <div>
-          {temperSelect &&
-            temperSelect.map((temp) => (
-              <p className="temper-selected" key={temp.id}>
-                {temp.name}
-              </p>
-            ))}
-        </div>
-        <p className="danger">{errors.temperaments}</p>
+        <p className="danger">{errors.temperament}</p>
         <label htmlFor="image">Image: </label>
         <input
           id="image"
@@ -216,7 +211,7 @@ export default function Form() {
         />
         <p className="danger">{errors.image}</p>
         <button className="create-button" type="submit">
-          Create
+          Create dog
         </button>
       </form>
     </div>
