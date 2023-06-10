@@ -11,7 +11,7 @@ export default function Card({ id, name, lifeSpan, temperament, image }) {
         <option value="">Temperaments</option>
         {temperament &&
           temperament.map((temp, index) => (
-            <option key={index}>{temp.name}</option>
+            <option key={index}>{temp.name ? temp.name : temp}</option>
           ))}
       </select>
       <img src={image} alt={name} className="dog-image" />
