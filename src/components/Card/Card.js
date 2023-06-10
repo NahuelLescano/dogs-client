@@ -10,7 +10,9 @@ export default function Card({ id, name, lifeSpan, temperament, image }) {
       <select className="card-select">
         <option value="">Temperaments</option>
         {temperament &&
-          temperament.map((temp, index) => <option key={index}>{temp}</option>)}
+          temperament.map((temp, index) => (
+            <option key={index}>{temp.name}</option>
+          ))}
       </select>
       <img src={image} alt={name} className="dog-image" />
       <button className="card-button">
