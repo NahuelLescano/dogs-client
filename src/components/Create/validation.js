@@ -1,93 +1,91 @@
 export default function validation({
-    weightMin,
-    weightMax,
-    heightMin,
-    heightMax,
-    name,
-    life_span,
-    image,
-    temperaments,
+  weightMin,
+  weightMax,
+  heightMin,
+  heightMax,
+  name,
+  life_span,
+  image,
+  temperament,
 }) {
-  const regexName = /^([a-zA-Z ]+)$/i;
+  const regexName = /^([a-zA-Z\s]+)$/i;
   const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
   const errors = {};
 
-  if (name === '') {
-    errors.name = 'Provide the necessary info.';
+  // name validations.
+  if (!name) {
+    errors.name = 'Must provide a name.';
   } else if (!regexName.test(name)) {
     errors.name = 'It cannot have special characters or numbers.';
+  } else if (name.length > 20) {
+    errors.name = 'Name is too long.';
   }
 
-  if (
-    isNaN(weightMin) ||
-    isNaN(weightMax) ||
-    isNaN(heightMin) ||
-    isNaN(heightMax)
-  ) {
+  // weight validations.
+  if (!weightMin) {
+    errors.weightMin = 'Enter a minimum weight.';
+  } else if (isNaN(parseInt(weightMin))) {
     errors.weightMin = 'Only numbers.';
+  } else if (parseInt(weightMin) < 1) {
+    errors.weightMin = 'Enter a positive number.';
+  }
+  if (!weightMax) {
+    errors.weightMax = 'Enter a maximum weight.';
+  } else if (isNaN(parseInt(weightMax))) {
     errors.weightMax = 'Only numbers.';
+  } else if (parseInt(weightMin) >= parseInt(weightMax)) {
+    errors.weightMax = 'Maximum weight must be greater than minimum one.';
+  }
+
+  // height validations.
+  if (!heightMin) {
+    errors.heightMin = 'Enter a minimum height.';
+  } else if (isNaN(parseInt(heightMin))) {
     errors.heightMin = 'Only numbers.';
+  } else if (parseInt(heightMin) < 1) {
+    errors.heightMin = 'Enter a positive number.';
+  }
+  if (!heightMax) {
+    errors.heightMax = 'Enter a maximum height.';
+  } else if (isNaN(parseInt(heightMax))) {
     errors.heightMax = 'Only numbers.';
+  } else if (parseInt(heightMin) >= parseInt(heightMax)) {
+    errors.heightMax = 'Maximum height must be greater the minimum one.';
   }
 
-  if (
-    parseInt(weightMax) < parseInt(weightMin) ||
-    parseInt(heightMax) < parseInt(heightMin)
-  ) {
-    errors.weightMax = 'Maximum must be greater than minimum.';
-    errors.heightMax = 'Maximum must be greater than minimum.';
-  }
-
-  if (
-    parseInt(weightMin) > parseInt(weightMax) ||
-    parseInt(heightMin) > parseInt(heightMax)
-  ) {
-    errors.weightMin = '';
-    errors.weightMax = 'weightMax must be maximum';
-    errors.heightMin = '';
-    errors.heightMax = 'heightMax must be maximum';
-  }
-
-  if (
-    parseInt(weightMax) > parseInt(weightMin) ||
-    parseInt(heightMax) > parseInt(heightMin)
-  ) {
-    errors.weightMin = '';
-    errors.weightMax = '';
-    errors.heightMin = '';
-    errors.heightMax = '';
-  }
-
-  if (life_span === '') {
-    errors.life_span = 'Provide the necessary info.';
+  // life span validations.
+  if (!life_span) {
+    errors.life_span = 'Must provide a number.';
   } else if (!life_span.includes('-')) {
     if (isNaN(life_span)) {
-      errors.life_span = 'error';
-    } else {
-      errors.life_span = '';
+      errors.life_span = 'Only numbers.';
     }
   } else {
-    const aux = life_span.split('-');
-    const number = aux.every((value) => {
-      return !isNaN(value);
-    });
-    if (!number || aux.length < 1) {
-      errors.life_span = 'error';
-    } else {
-      errors.life_span = '';
+    const numbers = life_span.split('-');
+    if (numbers.length < 1) {
+      errors.life_span = 'Provide a second number.';
+    } else if (numbers.length > 3) {
+      errors.life_span = 'Only two numbers must be provided.';
+    }
+
+    const number = life_span
+      .split('-')
+      .every((value) => !isNaN(parseInt(value)));
+    if (!number) {
+      errors.life_span = 'Each one must be numbers.';
     }
   }
 
-  if (temperaments.length < 1) {
-    errors.temperaments = 'Choose at least 2 temperaments';
-  } else {
-    errors.temperaments = '';
+  // Temperament validation.
+  if (temperament.length < 1) {
+    errors.temperament = 'Choose at least 2 temperaments';
   }
 
-  if (image === '' || !regexImage.test(image)) {
-    errors.image = 'error';
-  } else {
-    errors.image = '';
+  // Image validations.
+  if (!image) {
+    errors.image = 'Must provide an image url.';
+  } else if (!regexImage.test(image)) {
+    errors.image = 'Must provide a valide image url.';
   }
 
   return errors;
