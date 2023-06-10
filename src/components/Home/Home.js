@@ -61,7 +61,9 @@ export default function Home() {
                   id={dog.id}
                   name={dog.name}
                   lifeSpan={dog.life_span}
-                  temperament={dog.temperament}
+                  temperament={
+                    dog.temperament ? dog.temperament : dog.Temperaments
+                  }
                   image={dog.image}
                 />
               </div>
