@@ -1,8 +1,8 @@
 .dog-card {
   border: 2px solid gray;
   border-radius: 1rem;
-  width: 300px;
-  height: 32rem;
+  width: 320px;
+  height: 35rem;
   margin: 1rem;
   color: black;
   display: flex;
@@ -15,7 +15,7 @@
 }
 
 .dog-image {
-  width: 300px;
+  width: 320px;
   height: 20em;
   border-radius: 1rem;
 }
@@ -44,9 +44,7 @@
   margin-top: 5%;
 }
 
-.card-select {
-  margin-top: 2px;
-  border-radius: 1rem;
-  border: 2px solid gray;
-  margin-bottom: 2%;
+.temper-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
