@@ -46,10 +46,7 @@
   font-size: 0.9rem;
 }
 
-.temp-select {
-  margin-top: 2px;
-  border-radius: 1rem;
-  border: 2px solid gray;
-  margin-bottom: 2%;
-  width: 40%;
+.detail-temper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
