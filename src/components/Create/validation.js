@@ -8,6 +8,7 @@ export default function validation({
   image,
   temperament,
 }) {
+  console.log(temperament);
   const regexName = /^([a-zA-Z\s]+)$/i;
   const regexImage = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/i;
   const errors = {};
@@ -56,28 +57,12 @@ export default function validation({
   // life span validations.
   if (!life_span) {
     errors.life_span = 'Must provide a number.';
-  } else if (!life_span.includes('-')) {
-    if (isNaN(life_span)) {
-      errors.life_span = 'Only numbers.';
-    }
-  } else {
-    const numbers = life_span.split('-');
-    if (numbers.length < 1) {
-      errors.life_span = 'Provide a second number.';
-    } else if (numbers.length > 3) {
-      errors.life_span = 'Only two numbers must be provided.';
-    }
-
-    const number = life_span
-      .split('-')
-      .every((value) => !isNaN(parseInt(value)));
-    if (!number) {
-      errors.life_span = 'Each one must be numbers.';
-    }
+  } else if (isNaN(parseInt(life_span))) {
+    errors.life_span = 'Only numbers.';
   }
 
   // Temperament validation.
-  if (temperament.length < 1) {
+  if (temperament.length < 2) {
     errors.temperament = 'Choose at least 2 temperaments';
   }
 
