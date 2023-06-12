@@ -9,6 +9,7 @@ import './Create.css';
 const { REACT_APP_GET_ALL_DOGS } = process.env;
 
 export default function Form() {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({
     weightMin: '',
     weightMax: '',
@@ -55,28 +56,30 @@ export default function Form() {
   };
 
   const handleSelectChange = (e) => {
-    setErrors(
-      validation({
+    if (
+      e.target.value !== 'Choose at least two' &&
+      !userInputs.temperament.includes(e.target.value)
+    ) {
+      setErrors(
+        validation({
+          ...userInputs,
+          temperament: [...userInputs.temperament, e.target.value],
+        })
+      );
+
+      setUserInputs({
         ...userInputs,
-        temperament: e.target.value,
-      })
-    );
+        temperament: [...userInputs.temperament, e.target.value],
+      });
 
-    setUserInputs({
-      ...userInputs,
-      temperament: [...userInputs.temperament, e.target.value],
-    });
-
-    if (temperSelect.includes(e.target.value)) {
-      alert('It was already selected.');
-    } else {
       setTemperSelect([...temperSelect, e.target.value]);
+    } else {
+      alert('It was already selected.');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (
       Object.values(errors).every((error) => error === '') &&
       userInputs.temperament.length >= 2
@@ -107,6 +110,7 @@ export default function Form() {
       try {
         const response = await axios.post(REACT_APP_GET_ALL_DOGS, inputs);
         alert(response?.message || 'Dog was successfully created.');
+        navigate('/home');
       } catch (error) {
         alert(
           error.response?.data?.message ||
@@ -118,9 +122,25 @@ export default function Form() {
     }
   };
 
-  const navigate = useNavigate();
   const handleClick = () => navigate('/home');
 
+  const handleDelete = (e) => {
+    const temper = temperSelect.filter((temp) => temp !== e.target.value);
+    setTemperSelect(temper);
+    setUserInputs({
+      ...userInputs,
+      temperament: temper,
+    });
+    setErrors(
+      validation({
+        ...errors,
+        temperament: [...userInputs.temperament, e.target.value],
+      })
+    );
+  };
+
+  console.log(userInputs);
+  console.log(temperSelect);
   return (
     <div className="create-container">
       <button className="back-button" onClick={handleClick}>
@@ -133,6 +153,7 @@ export default function Form() {
         <input
           id="min"
           name="weightMin"
+          type="number"
           placeholder="Enter the minimum..."
           onChange={handleInputChange}
           className="create-input"
@@ -142,6 +163,7 @@ export default function Form() {
         <input
           id="max"
           name="weightMax"
+          type="number"
           placeholder="Enter the maximum..."
           onChange={handleInputChange}
           className="create-input"
@@ -152,6 +174,7 @@ export default function Form() {
         <input
           id="min"
           name="heightMin"
+          type="number"
           placeholder="Enter the minimum..."
           onChange={handleInputChange}
           className="create-input"
@@ -161,6 +184,7 @@ export default function Form() {
         <input
           id="max"
           name="heightMax"
+          type="number"
           placeholder="Enter the maximum..."
           onChange={handleInputChange}
           className="create-input"
@@ -179,6 +203,7 @@ export default function Form() {
         <input
           id="life_span"
           name="life_span"
+          type="number"
           placeholder="min - max"
           onChange={handleInputChange}
           className="create-input"
@@ -199,13 +224,27 @@ export default function Form() {
               </option>
             ))}
         </select>
+        <div className="temper-selected">
+          {temperSelect &&
+            temperSelect.map((temp, index) => (
+              <button
+                key={index}
+                value={temp}
+                type="button"
+                onClick={handleDelete}
+                className="button-temper"
+              >
+                {temp}
+              </button>
+            ))}
+        </div>
         <p className="danger">{errors.temperament}</p>
         <label htmlFor="image">Image: </label>
         <input
           id="image"
           name="image"
           type="url"
-          placeholder="Enter the URL..."
+          placeholder="https://example.jpg"
           className="create-input"
           onChange={handleInputChange}
         />
