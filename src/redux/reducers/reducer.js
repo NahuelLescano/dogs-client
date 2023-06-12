@@ -47,8 +47,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
 
     case DOG_TEMPERAMENT:
       const dogTemper = state.dogs.filter((dog) =>
-        dog.temperament?.includes(payload)
+        dog.temperament
+          ? dog.temperament.includes(payload)
+          : dog.Temperaments.some((temp) => temp.name.includes(payload))
       );
+
       return {
         ...state,
         allDogs: dogTemper,
