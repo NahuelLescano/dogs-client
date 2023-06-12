@@ -33,15 +33,16 @@ export default function Details() {
             <h2>Height: {dog.height?.metric} cm</h2>
             <h2>Weight: {dog.weight?.metric} kg</h2>
             <h2>Life span: {dog.life_span}</h2>
-            <select className="temp-select">
+            <h2>Temperaments: </h2>
+            <div className="detail-temper">
               {dog.temperament
                 ? dog.temperament
                     .split(', ')
                     .map((temp, index) => <option key={index}>{temp}</option>)
                 : dog.Temperaments.map((temp) => (
-                    <option key={temp.id}>{temp.name}</option>
+                    <h3 key={temp.id}>{temp.name}</h3>
                   ))}
-            </select>
+            </div>
           </div>
           <button className="button-detail" onClick={handleClick}>
             Go back
