@@ -8,12 +8,6 @@
   position: relative;
 }
 
-.temper-selected {
-  display: inline;
-  padding: 3%;
-  color: white;
-}
-
 .form {
   font-size: large;
   display: flex;
@@ -74,4 +68,19 @@
   font-size: 0.8rem;
   transition: 0.2s;
   margin-right: 5%;
+}
+
+.temper-selected {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 3%;
+}
+
+.button-temper {
+  border: none;
+  outline: none;
+  border-radius: 2rem;
+  background-color: #003d7f;
+  color: white;
+  cursor: pointer;
 }
